@@ -5,7 +5,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.jsp!</Text>
-      <Text>Start building your app!</Text>
+      <Text>Start building your appasdasdas!</Text>
       <StatusBar style="auto" />
     </View>
   );
