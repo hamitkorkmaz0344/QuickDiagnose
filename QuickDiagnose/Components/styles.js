@@ -112,4 +112,4 @@ export const Line = styled.View`
     width: 100%;
     background-color: ${darkLight};
     margin-vertical: 10px;
-`;
+`;   
