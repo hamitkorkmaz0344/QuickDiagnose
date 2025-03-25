@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 import Constants from 'expo-constants';
 
@@ -30,17 +30,22 @@ export const InnerContainer = styled.View`
     flex: 1;
     width: 100%;
     align-items: center;
+    padding-top: 50px;
 `;
 export const PageLogo = styled.Image`
     width: 250px;
     height: 200px;
+    border-radius: 20px; 
+    margin-bottom: 10px;
 `;
 
 export const PageTitle = styled.Text`
     font-size: 30px;
     text-align: center;
     font-weight: bold;
-    color: ${brand};
+    color: "White";
+    font-family: 'poppins';
+    margin-bottom: 10px;
 `;
 
 export const SubTitle = styled.Text`
@@ -113,3 +118,104 @@ export const Line = styled.View`
     background-color: ${darkLight};
     margin-vertical: 10px;
 `;
+
+export const ExtraView = styled.View`
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+`;
+
+export const ExtraText = styled.Text`
+    justify-content: center;
+    align-content: center;
+    color: ${tertiary};
+    font-size: 15px;
+`;
+
+export const TextLink = styled.TouchableOpacity`
+    justify-content: center;
+    align-items: center;
+`;
+
+export const TextLinkContent = styled.Text`
+    color: ${brand};
+    font-size: 15px;
+`;
+
+export const styles = StyleSheet.create({
+    backgroundImage: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+    },
+    overlay: {
+        backgroundColor: "rgba(0,0,0,0.5)",
+        flex: 1,
+    },
+    userTypeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        width: '100%',
+        marginVertical: 20,
+    },
+    userTypeButton: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '45%',
+        height: 120,
+        borderRadius: 15,
+        backgroundColor: 'white',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    patientButton: {
+        borderColor: brand,
+        borderWidth: 2,
+    },
+    doctorButton: {
+        borderColor: brand,
+        borderWidth: 2,
+    },
+    userTypeText: {
+        marginTop: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: brand,
+    },
+    backButton: {
+        backgroundColor: "white",
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+
+    },
+    backButtonText: {
+        color: 'Black',
+        fontSize: 18,
+        fontWeight: '500',
+    },
+
+    signupButton: {
+        backgroundColor: brand,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+    },
+    signupButtonText: {
+        color: primary,
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginLeft: 10,
+    },
+});

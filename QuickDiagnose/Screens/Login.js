@@ -17,81 +17,121 @@ import {
     ButtonText,
     MsgBox,
     Line,
+    styles
 } from './../Components/styles';
-import { View, Text, Image, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { Octicons, Ionicons } from '@expo/vector-icons';
 
-const { darkLight } = Colors;
+const { darkLight, brand, primary, tertiary } = Colors;
 
 const Login = () => {
     const [hidePassword, setHidePassword] = useState(true);
+    const [userType, setUserType] = useState(null); // 'patient' veya 'doctor'
     
-    return (
-        <ImageBackground 
-            source={require('./../assets/img/4770.jpg')} // Arka plan resmi
-            style={styles.backgroundImage} // Resmi tam ekran yap
-        >
-            <StyledContainer style={styles.overlay}>
+    if (!userType) {
+        return (
+            <ImageBackground 
+                source={require('./../assets/img/5764.jpg')}
+                style={styles.backgroundImage}
+            >
                 <StatusBar style="dark" />
                 <InnerContainer>
                     <PageLogo resizeMode="cover" source={require('./../assets/img/Logo.webp')} />
                     <PageTitle>QuickDiagnose</PageTitle>
-                    <SubTitle>Hasta Girişi</SubTitle>
+                    <SubTitle>Giriş Yap</SubTitle>
 
-                    <Formik
-                        initialValues={{ email: '', password: '' }}
-                        onSubmit={(values) => {
-                            console.log(values);
-                        }}
-                    >
-                        {({ handleChange, handleBlur, handleSubmit, values }) => (
-                            <StyledFormArea>
-                                <MyTextInput
-                                    label="Email Address"
-                                    icon="mail"
-                                    placeholder="hasta1234@gmail.com"
-                                    placeholderTextColor={darkLight}
-                                    onChangeText={handleChange('email')}
-                                    onBlur={handleBlur('email')}
-                                    value={values.email}
-                                    keyboardType="email-address"
-                                />
+                    <StyledFormArea>
+                        <View style={styles.userTypeContainer}>
+                            <TouchableOpacity 
+                                style={[styles.userTypeButton, styles.patientButton]}
+                                onPress={() => setUserType('patient')}
+                            >
+                                <Octicons name="person" size={30} color={brand} />
+                                <Text style={styles.userTypeText}>Hasta Girişi</Text>
+                            </TouchableOpacity>
 
-                                <MyTextInput
-                                    label="Password"
-                                    icon="lock"
-                                    placeholder="********"
-                                    placeholderTextColor={darkLight}
-                                    onChangeText={handleChange('password')}
-                                    onBlur={handleBlur('password')}
-                                    value={values.password}
-                                    secureTextEntry={hidePassword}
-                                    isPassword={true}
-                                    hidePassword={hidePassword}
-                                    setHidePassword={setHidePassword}
-                                />
-                                
-                                <MsgBox>
-                                    <Text>...</Text>
-                                </MsgBox>
-
-                                <StyledButton onPress={handleSubmit}>
-                                    <ButtonText>Giriş yap</ButtonText>
-                                </StyledButton>
-                                <Line />
-                                <StyledButton onPress={handleSubmit}>
-                                    <ButtonText>Kayıt ol</ButtonText>
-                                </StyledButton>
-                            </StyledFormArea>
-                        )}
-                    </Formik>
+                            <TouchableOpacity 
+                                style={[styles.userTypeButton, styles.doctorButton]}
+                                onPress={() => setUserType('doctor')}
+                            >
+                                <Octicons name="briefcase" size={30} color={brand} />
+                                <Text style={styles.userTypeText}>Doktor Girişi</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </StyledFormArea>
                 </InnerContainer>
-            </StyledContainer>
+            </ImageBackground>
+        );
+    }
+    
+    return (
+        <ImageBackground 
+            source={require('./../assets/img/5764.jpg')}
+            style={styles.backgroundImage}
+        >
+            <StatusBar style="dark" />
+            <InnerContainer>
+                <PageLogo resizeMode="cover" source={require('./../assets/img/Logo.webp')} />
+                <PageTitle>QuickDiagnose</PageTitle>
+                <SubTitle>{userType === 'patient' ? 'Hasta Girişi' : 'Doktor Girişi'}</SubTitle>
+
+                <Formik
+                    initialValues={{ email: '', password: '' }}
+                    onSubmit={(values) => {
+                        console.log(values);
+                    }}
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values }) => (
+                        <StyledFormArea>
+                            <MyTextInput
+                                label="Email Address"
+                                icon="mail"
+                                placeholder={userType === 'patient' ? "hasta@example.com" : "doktor@example.com"}
+                                placeholderTextColor={darkLight}
+                                onChangeText={handleChange('email')}
+                                onBlur={handleBlur('email')}
+                                value={values.email}
+                                keyboardType="email-address"
+                            />
+
+                            <MyTextInput
+                                label="Password"
+                                icon="lock"
+                                placeholder="********"
+                                placeholderTextColor={darkLight}
+                                onChangeText={handleChange('password')}
+                                onBlur={handleBlur('password')}
+                                value={values.password}
+                                secureTextEntry={hidePassword}
+                                isPassword={true}
+                                hidePassword={hidePassword}
+                                setHidePassword={setHidePassword}
+                            />
+                            
+                            <MsgBox>
+                                <Text>...</Text>
+                            </MsgBox>
+
+                            <StyledButton onPress={handleSubmit}>
+                                <ButtonText>Giriş yap</ButtonText>
+                            </StyledButton>
+                            <Line />
+                            <StyledButton style={styles.signupButton} onPress={handleSubmit}>
+                                <Octicons name="person-add" size={24} color={primary} />
+                                <Text style={styles.signupButtonText}>Yeni Hesap Oluştur</Text>
+                            </StyledButton>
+                            <StyledButton style={styles.backButton} onPress={() => setUserType(null)}>
+                                <Octicons name="arrow-left" size={16} color={"white"} style={{ marginRight: 5 }} />
+                                <Text style={styles.backButtonText}>Geri</Text>
+                            </StyledButton>
+                        </StyledFormArea>
+                    )}
+                </Formik>
+            </InnerContainer>
         </ImageBackground>
     );
 };
 
-// **GÖZ İKONU İÇİN METİN ALANI**
 const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
     return (
         <View>
@@ -108,19 +148,5 @@ const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, .
         </View>
     );
 };
-
-// **STİL DOSYASI**
-const styles = StyleSheet.create({
-    backgroundImage: {
-        flex: 1,
-        resizeMode: "cover", // Resmi tam ekran yap
-        width: "100%",
-        height: "100%",
-    },
-    overlay: {
-        backgroundColor: "rgba(0,0,0,0.5)", // Hafif karartma efekti (Opsiyonel)
-        flex: 1,
-    },
-});
 
 export default Login;
