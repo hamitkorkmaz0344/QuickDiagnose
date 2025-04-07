@@ -1,7 +1,9 @@
-import styled from 'styled-components';
+
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 import Constants from 'expo-constants';
+import styled from 'styled-components/native'
+
 
 
 const StatusBarHeight = Constants.statusBarHeight;
@@ -206,14 +208,14 @@ export const styles = StyleSheet.create({
     },
 
     signupButton: {
-        backgroundColor: brand,
+        backgroundColor: "white",
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
     },
     signupButtonText: {
-        color: primary,
+        color: "black",
         fontSize: 16,
         fontWeight: 'bold',
         marginLeft: 10,
