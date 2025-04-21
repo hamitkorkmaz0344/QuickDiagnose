@@ -33,7 +33,7 @@ const { darkLight, brand, primary } = Colors;
 const Login = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [userType, setUserType] = useState(null);
-  const navigation = useNavigation(); // <-- Navigasyon nesnesi
+  const navigation = useNavigation(); // Navigasyon nesnesi
 
   if (!userType) {
     return (
@@ -73,12 +73,12 @@ const Login = () => {
 
   return (
     <ImageBackground
-    source={require('../assets/img/back.png')}
+      source={require('../assets/img/back.png')}
       style={styles.backgroundImage}
     >
       <StatusBar style="dark" />
       <InnerContainer>
-      <PageLogo resizeMode="cover" source={require('./../assets/img/logom.png')} />
+        <PageLogo resizeMode="cover" source={require('./../assets/img/logom.png')} />
         <PageTitle>QuickDiagnose</PageTitle>
         <SubTitle>{userType === 'patient' ? 'Hasta Girişi' : 'Doktor Girişi'}</SubTitle>
 
@@ -86,6 +86,7 @@ const Login = () => {
           initialValues={{ email: '', password: '' }}
           onSubmit={(values) => {
             console.log(values);
+            navigation.navigate('Home'); // ← Yönlendirme buraya eklendi
           }}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
