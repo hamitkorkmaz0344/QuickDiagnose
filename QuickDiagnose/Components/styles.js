@@ -119,6 +119,7 @@ export const Line = styled.View`
     width: 100%;
     background-color: ${darkLight};
     margin-vertical: 10px;
+<<<<<<< HEAD
 `;
 
 export const ExtraView = styled.View`
@@ -221,3 +222,4 @@ export const styles = StyleSheet.create({
         marginLeft: 10,
     },
 });
+
