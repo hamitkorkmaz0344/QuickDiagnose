@@ -86,7 +86,8 @@ const Login = () => {
           initialValues={{ email: '', password: '' }}
           onSubmit={(values) => {
             console.log(values);
-            navigation.navigate('Home'); // ← Yönlendirme buraya eklendi
+            navigation.navigate('DrawerRoutes');
+
           }}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
