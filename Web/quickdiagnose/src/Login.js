@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Container,
   LeftPanel,
@@ -25,6 +26,7 @@ import logo from './img/Logo.webp';
 const Login = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [userType, setUserType] = useState(null);
+  const navigate = useNavigate();
 
   const FormContent = (
     <>
@@ -34,7 +36,10 @@ const Login = () => {
 
       <Formik
         initialValues={{ email: '', password: '' }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => {
+          console.log(values);
+          navigate('/home');
+        }}
       >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <FormArea onSubmit={handleSubmit}>
@@ -62,9 +67,11 @@ const Login = () => {
             <MsgBox>...</MsgBox>
             <Button type="submit">Giriş Yap</Button>
             <Line />
-            <SignupButton type="button">
-              <FaUserPlus /> Yeni Hesap Oluştur
-            </SignupButton>
+            <Link to="/signup" style={{ textDecoration: 'none', width: '100%' }}>
+              <SignupButton type="button">
+                <FaUserPlus /> Yeni Hesap Oluştur
+              </SignupButton>
+            </Link>
             <BackButton type="button" onClick={() => setUserType(null)}>
               <FaArrowLeft /> Geri
             </BackButton>
@@ -95,7 +102,19 @@ const Login = () => {
         )}
       </LeftPanel>
 
-      <RightPanel />
+      <RightPanel>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '20px' }}>QuickDiagnose</h2>
+          <p style={{ fontSize: '1.2rem', marginBottom: '30px' }}>
+            Sağlık hizmetlerinize hızlı ve güvenli erişim
+          </p>
+          <div style={{ fontSize: '1rem', lineHeight: '1.6' }}>
+            <p>✓ Kolay randevu sistemi</p>
+            <p>✓ Güvenli hasta verileri</p>
+            <p>✓ Hızlı teşhis desteği</p>
+          </div>
+        </div>
+      </RightPanel>
     </Container>
   );
 };
