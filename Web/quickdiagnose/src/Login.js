@@ -16,90 +16,112 @@ import {
   Button,
   MsgBox,
   Line,
-  SignupButton,
-  BackButton
+  SignupButton
 } from './styles';
-import { FaUser, FaLock, FaEnvelope, FaArrowLeft, FaUserPlus, FaBriefcase } from 'react-icons/fa';
+import { FaUser, FaLock, FaUserPlus } from 'react-icons/fa';
+
+import { loginDoctor, loginPatient } from './services/authServices';
 
 import logo from './img/Logo.webp';
 
 const Login = () => {
   const [hidePassword, setHidePassword] = useState(true);
-  const [userType, setUserType] = useState(null);
+  const [userType, setUserType] = useState('patient');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const FormContent = (
-    <>
-      <Logo src={logo} alt="QuickDiagnose Logo" />
-      <Title>QuickDiagnose</Title>
-      <SubTitle>{userType === 'patient' ? 'Hasta Girişi' : 'Doktor Girişi'}</SubTitle>
-
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        onSubmit={(values) => {
-          console.log(values);
-          navigate('/home');
-        }}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <FormArea onSubmit={handleSubmit}>
-            <TextInput
-              label="Email Address"
-              icon={<FaEnvelope />}
-              placeholder={userType === 'patient' ? 'hasta@example.com' : 'doktor@example.com'}
-              onChange={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-              type="email"
-            />
-            <TextInput
-              label="Password"
-              icon={<FaLock />}
-              placeholder="********"
-              onChange={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-              type={hidePassword ? 'password' : 'text'}
-              isPassword
-              togglePassword={() => setHidePassword(!hidePassword)}
-              hidePassword={hidePassword}
-            />
-            <MsgBox>...</MsgBox>
-            <Button type="submit">Giriş Yap</Button>
-            <Line />
-            <Link to="/signup" style={{ textDecoration: 'none', width: '100%' }}>
-              <SignupButton type="button">
-                <FaUserPlus /> Yeni Hesap Oluştur
-              </SignupButton>
-            </Link>
-            <BackButton type="button" onClick={() => setUserType(null)}>
-              <FaArrowLeft /> Geri
-            </BackButton>
-          </FormArea>
-        )}
-      </Formik>
-    </>
-  );
 
   return (
     <Container>
       <LeftPanel>
-        {!userType ? (
-          <>
-            <Logo src={logo} alt="QuickDiagnose Logo" />
-            <SubTitle>Giriş Yap</SubTitle>
-            <FormArea>
-              <Button onClick={() => setUserType('patient')}>
-                <FaUser /> Hasta Girişi
-              </Button>
-              <Button onClick={() => setUserType('doctor')}>
-                <FaBriefcase /> Doktor Girişi
-              </Button>
+        <Logo src={logo} alt="QuickDiagnose Logo" />
+        <Title>QuickDiagnose</Title>
+        <SubTitle>Giriş Yap</SubTitle>
+
+        <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+          <Button
+            type="button"
+            onClick={() => setUserType('patient')}
+            style={{
+              backgroundColor: userType === 'patient' ? '#007bff' : '#f0f0f0',
+              color: userType === 'patient' ? 'white' : 'black'
+            }}
+          >
+            Hasta
+          </Button>
+          <Button
+            type="button"
+            onClick={() => setUserType('doctor')}
+            style={{
+              backgroundColor: userType === 'doctor' ? '#007bff' : '#f0f0f0',
+              color: userType === 'doctor' ? 'white' : 'black'
+            }}
+          >
+            Doktor
+          </Button>
+        </div>
+
+        <Formik
+          initialValues={{ tc: '', password: '' }}
+          onSubmit={async (values) => {
+            try {
+              setError('');
+
+              const credentials = {
+                tc: values.tc,
+                password: values.password
+              };
+
+              const response = userType === 'doctor'
+                ? await loginDoctor(credentials)
+                : await loginPatient(credentials);
+
+                if (response && response.message === 'Giriş başarılı') {
+                  localStorage.setItem('user', JSON.stringify(response.doctor || response.patient));
+                  localStorage.setItem('userType', userType);
+                  navigate('/home');
+                } else {
+                  setError(response?.message || 'Giriş başarısız. Kimlik bilgilerinizi kontrol edin.');
+                }
+                
+            } catch (error) {
+              setError('Sunucu hatası. Lütfen tekrar deneyin.');
+            }
+          }}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
+            <FormArea onSubmit={handleSubmit}>
+              <TextInput
+                label="T.C. Kimlik No"
+                icon={<FaUser />}
+                placeholder="TC kimlik numarası"
+                onChange={handleChange('tc')}
+                onBlur={handleBlur('tc')}
+                value={values.tc}
+                type="text"
+              />
+              <TextInput
+                label="Şifre"
+                icon={<FaLock />}
+                placeholder="********"
+                onChange={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                type={hidePassword ? 'password' : 'text'}
+                isPassword
+                togglePassword={() => setHidePassword(!hidePassword)}
+                hidePassword={hidePassword}
+              />
+              {error && <MsgBox style={{ color: 'red' }}>{error}</MsgBox>}
+              <Button type="submit">Giriş Yap</Button>
+              <Line />
+              <Link to="/signup" style={{ textDecoration: 'none', width: '100%' }}>
+                <SignupButton type="button">
+                  <FaUserPlus /> Yeni Hesap Oluştur
+                </SignupButton>
+              </Link>
             </FormArea>
-          </>
-        ) : (
-          FormContent
-        )}
+          )}
+        </Formik>
       </LeftPanel>
 
       <RightPanel>
